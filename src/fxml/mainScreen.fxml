@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="masterPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="669.0" prefWidth="1343.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainScreenController">
+   <top>
+      <HBox fx:id="parent" alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="1343.0" spacing="5.0" style="-fx-background-color: #C4C4C4;" BorderPane.alignment="CENTER">
+         <children>
+            <Circle fx:id="minimizeButton" onMouseEntered="#minimizeButtonEntered" onMouseExited="#minimizeButtonExited" onMousePressed="#minimizeAction" radius="9.0" stroke="TRANSPARENT" strokeType="INSIDE">
+               <fill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop color="#4ab1ff" />
+                        <Stop color="#70b1ff" offset="0.007662835249042145" />
+                        <Stop color="#2bffc3" offset="1.0" />
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Circle>
+            <Circle fx:id="closeButton" onMouseEntered="#closeButtonEntered" onMouseExited="#closeButtonExited" onMousePressed="#closeAction" radius="9.0" stroke="#ffffff00" strokeType="INSIDE">
+               <fill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop color="#ffa6a6" />
+                        <Stop color="RED" offset="1.0" />
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Circle>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets right="3.0" />
+         </padding>
+      </HBox>
+   </top>
+   <left>
+      <VBox alignment="TOP_CENTER" prefHeight="643.0" prefWidth="238.0" style="-fx-background-color: #9E96CE;" BorderPane.alignment="CENTER">
+         <children>
+            <Label prefHeight="64.0" prefWidth="169.0" text="Categories" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Montserrat Regular" size="31.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin></Label>
+            <Button mnemonicParsing="false" onAction="#addButtonAction" prefHeight="35.0" prefWidth="105.0" style="-fx-background-radius: 15; -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #53FA82, #7460EA);" text="Add">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Poiret One" size="22.0" />
+               </font>
+            </Button>
+            <Line endX="100.0" fill="WHITE" startX="-100.0" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="3.0">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <stroke>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop color="#58c3c7" />
+                        <Stop color="#58c3c7" offset="0.007662835249042145" />
+                        <Stop color="#00ff40" offset="0.9965635738831614" />
+                        <Stop color="#00ff40" offset="1.0" />
+                     </stops>
+                  </LinearGradient>
+               </stroke>
+            </Line>
+            <Label prefHeight="64.0" prefWidth="110.0" text="Games" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Poiret One" size="31.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Label>
+            <Label prefHeight="64.0" prefWidth="155.0" text="Softwares" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Poiret One" size="31.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Label>
+            <Line endX="100.0" fill="WHITE" startX="-100.0" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="3.0">
+               <stroke>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop color="#58c3c7" />
+                        <Stop color="#58c3c7" offset="0.007662835249042145" />
+                        <Stop color="#00ff40" offset="0.9965635738831614" />
+                        <Stop color="#00ff40" offset="1.0" />
+                     </stops>
+                  </LinearGradient>
+               </stroke>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="10.0" />
+               </VBox.margin>
+            </Line>
+            <Label prefHeight="64.0" prefWidth="165.0" text="No custom categories registered" textAlignment="CENTER">
+               <font>
+                  <Font name="Poiret One" size="10.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Label>
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <ScrollPane hbarPolicy="NEVER" prefHeight="638.0" prefWidth="1140.0" style="-fx-background-color: #53FA82;" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+         <content>
+            <TilePane fx:id="apps" hgap="15.0" prefHeight="643.0" prefWidth="815.0" style="-fx-background-color: #53FA82;" vgap="5.0">
+               <children>
+                  <Rectangle arcHeight="10.0" arcWidth="10.0" height="202.0" stroke="#ffffff00" strokeType="INSIDE" width="145.0">
+                     <TilePane.margin>
+                        <Insets />
+                     </TilePane.margin>
+                     <fill>
+                        <LinearGradient endX="1.0" endY="1.0">
+                           <stops>
+                              <Stop color="#4ab1ff" />
+                              <Stop color="#4ab1ff" offset="0.007662835249042145" />
+                              <Stop color="#2bffc3" offset="1.0" />
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                  </Rectangle>
+               </children>
+               <padding>
+                  <Insets left="15.0" top="10.0" />
+               </padding>
+            </TilePane>
+         </content>
+      </ScrollPane>
+   </center>
+</BorderPane>
