@@ -1,0 +1,28 @@
+.radio-button .radio {
+    -fx-border-width: 1px;
+    -fx-border-color: #4ab1ff;
+    -fx-background-color: #4ab1ff;
+    -fx-background-image: null;
+    -fx-border-radius: 15px;
+    -fx-padding: 4px;
+}
+.radio-button .radio:selected {
+    -fx-background-color: #2bffc3;
+    -fx-background-image: null;
+}
+.radio-button -radio:armed {
+    -fx-background-color: #2bffc3;
+    -fx-background-image: null;
+}
+.radio-button -radio:determinate {
+    -fx-background-color: #2bffc3;
+    -fx-background-image: null;
+}
+.radio-button -radio:indeterminate {
+    -fx-background-color: #2bffc3;
+    -fx-background-image: null;
+}
+.radio-button .dot {
+    -fx-background-radius: 15px;
+    -fx-padding: 8px;
+}

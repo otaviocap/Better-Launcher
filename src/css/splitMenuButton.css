@@ -1,0 +1,35 @@
+.split-menu-button {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4ab1ff, #2bffc3); 
+    -fx-background-insets: 0 0 -1 0, 0;
+    -fx-background-radius: 3, 3;
+    -fx-padding: 0;
+}
+.split-menu-button > .label {
+    -fx-text-fill: -fx-text-base-color;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4ab1ff, #2bffc3); 
+    -fx-background-insets: 1 0 1 1, 2 1 2 2;
+    -fx-background-radius: 2 0 0 2, 1 0 0 1;
+    -fx-padding: 0.333333em 0.667em 0.333333em 0.667em; /* 4 8 4 8 */
+}
+.split-menu-button > .arrow-button {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4ab1ff, #2bffc3); 
+    -fx-background-insets: 1, 2;
+    -fx-background-radius: 0 2 2 0, 0 1 1 0;
+    -fx-padding: 0.5em 0.667em 0.5em 0.667em; /* 6 8 6 8 */
+}
+.split-menu-button:focused {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4ab1ff, #2bffc3);
+    -fx-background-insets: -0.2;
+    -fx-background-radius: 3;
+}
+.split-menu-button:focused > .label {
+    -fx-background-color: -linear-gradient(from 0% 0% to 100% 100%, #4ab1ff, #2bffc3);
+    -fx-background-insets: 1 0 1 1, 2 1 2 2, -1.4 0 -1.4 -1.4, 2.6 1.6 2.6 2.6;
+    -fx-background-radius: 2 0 0 2, 1 0 0 1, 4 0 0 4, 0;
+}
+.split-menu-button:focused > .arrow-button {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4ab1ff, #2bffc3);
+    -fx-background-insets: 1, 2, -1.4, 2.6;
+    -fx-background-radius: 0 2 2 0, 0 1 1 0, 0 4 4 0, 0;
+}
+

@@ -26,6 +26,8 @@ public class BetterLauncher extends Application {
         //Custom Fonts
         scene.getStylesheets().add("https://fonts.googleapis.com/css?family=Major+Mono+Display");
         scene.getStylesheets().add("https://fonts.googleapis.com/css?family=Poiret+One");
+        scene.getStylesheets().add("/css/radio.css");
+        scene.getStylesheets().add("/css/splitMenuButton.css");
         
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setTitle("Better Launcher");

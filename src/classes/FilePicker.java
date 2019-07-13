@@ -53,12 +53,14 @@ public class FilePicker extends StackPane {
     private void actions() {
         this.setOnMouseClicked((event) -> {
             file = fileChooser.showOpenDialog(((Stage) ((Node) event.getSource()).getScene().getWindow()));
-            if (isAnImagePicker) {
-                setImageAsBackground(file.getPath());
-                text.setVisible(false);
-            } else {
-                text.setFont(new Font(text.getFont().getFamily(), 15));
-                text.setText(file.getPath());
+            if (file != null) {
+                if (isAnImagePicker) {
+                    setImageAsBackground(file.getPath());
+                    text.setVisible(false);
+                } else {
+                    text.setTextFill(Color.BLACK);
+                    text.setText(file.getPath());
+                }
             }
         });
     }
@@ -73,7 +75,7 @@ public class FilePicker extends StackPane {
         rec.setFill(new LinearGradient(0, 0, 1.0, 1.0, true, CycleMethod.REFLECT, stops));
       
         //text
-        text.setFont(new Font("Montserrat", 20));   
+        text.setStyle("-fx-font-family: Montserrat; -fx-font-size: 15;"); 
     }
     
     private void setImageAsBackground(String imgUrl) {

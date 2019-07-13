@@ -62,7 +62,6 @@ public class MainScreenController implements Initializable {
         lnDefaults.put("close", closeButton.getFill());
         lnDefaults.put("minimize", minimizeButton.getFill());
         masterPane.setRight(new PropertiesPane());
-        apps.getChildren().add(new FilePicker("AA"));
         properties = (PropertiesPane) masterPane.getRight();
                 
         makeDraggable();
