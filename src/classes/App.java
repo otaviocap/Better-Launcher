@@ -5,6 +5,12 @@
  */
 package classes;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Side;
@@ -30,21 +36,96 @@ import javafx.scene.text.Font;
  */
 public class App extends StackPane {
     
-    private Rectangle background;
+    //interface vars
+    private Rectangle background = new Rectangle();
     private Label text;
     private boolean hasImage = false;
-    private String imgUrl = "";
     private ContextMenu cm;
+    
+    //app vars
+    private String imgUrl = "";
+    private String name;
+    private String pathExec;
+    private int releaseYear;
+    private String description;
+    private boolean isGame;
+    private List<String> categories;
+    private String args;
+    
     
     public App(String name) {
         super();
         enableContextMenu();
+        this.name = name;
         text = new Label(name);
-        background = new Rectangle();
         setDefaults();
         super.getChildren().add(background);
         super.getChildren().add(text);
     }
+
+    public App(String name, String pathExec, 
+            int releaseYear, String description, boolean isGame, List<String> categories, String args) {
+        super();
+        enableContextMenu();
+        this.text = new Label(name);
+        this.name = name;
+        this.pathExec = pathExec;
+        this.releaseYear = releaseYear;
+        this.description = description;
+        this.isGame = isGame;
+        this.categories = categories;
+        this.args = args;
+        
+        setDefaults();
+        super.getChildren().add(background);
+        super.getChildren().add(text);
+    }
+    
+    public App(String imgUrl, String name, String pathExec, 
+            int releaseYear, String description, boolean isGame, List<String> categories) {
+        super();
+        enableContextMenu();
+        this.imgUrl = imgUrl;
+        this.text = new Label(name);
+        this.name = name;
+        this.pathExec = pathExec;
+        this.releaseYear = releaseYear;
+        this.description = description;
+        this.isGame = isGame;
+        this.categories = categories;
+        this.args = "";
+
+        this.hasImage = true;
+        
+        setDefaults();
+        super.getChildren().add(background);
+        super.getChildren().add(text);
+    }
+    
+    //Remove pls
+       public App(String imgUrl, String name, String pathExec, 
+            int releaseYear, String description, boolean isGame) {
+        super();
+        enableContextMenu();
+        this.imgUrl = imgUrl;
+        this.text = new Label(name);
+        this.name = name;
+        this.pathExec = pathExec;
+        this.releaseYear = releaseYear;
+        this.description = description;
+        this.isGame = isGame;
+        this.categories = categories;
+        this.args = "";
+        
+        this.hasImage = true;
+        
+        setDefaults();
+        super.getChildren().add(background);
+        super.getChildren().add(text);
+    }
+    
+    
+    
     
     private void setDefaults() {
         //background
@@ -54,7 +135,7 @@ public class App extends StackPane {
         background.setArcWidth(10);
         
         if (hasImage) {
-            Image img = new Image(imgUrl);
+            Image img = new Image("file:///"+imgUrl);
             background.setFill(new ImagePattern(img));
         } else {
             Stop[] stops = new Stop[]{new Stop(0, Color.web("#4ab1ff")), new Stop(1, Color.web("#2bffc3"))};
@@ -88,6 +169,19 @@ public class App extends StackPane {
                 cm.show(me , event.getScreenX(), event.getScreenY());
             }
         });
+    }
+    
+    public void run() {
+        ProcessBuilder pb = new ProcessBuilder();
+        List<String> command = new ArrayList<>();
+        String i = pathExec +" "+ args;
+        command.addAll(Arrays.asList(i.split(" ")));
+        pb.command(command);
+        try {
+            pb.start();
+        } catch (IOException ex) {
+            System.out.println("An error occured while trying to execute the app " + ex.getMessage());
+        }
     }
 
     

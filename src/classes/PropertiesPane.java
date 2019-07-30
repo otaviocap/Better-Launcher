@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -17,16 +18,21 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 
 
 public class PropertiesPane extends VBox {
     
-    public PropertiesPane() {
+    private TilePane apps;
+    
+    public PropertiesPane(TilePane Apps) {
         super();
+        this.apps = apps;
         reset();
     }
     
@@ -174,7 +180,7 @@ public class PropertiesPane extends VBox {
             String releaseYear = ry.getText().isEmpty() ? null : ry.getText();
             String description = ds.getText().isEmpty() ? null : ds.getText();
             Object categorie = cb.getValue() != null ? cb.getValue() : null;
-            String gameOrSoftware = rbGame.isArmed() ? "Game" : "Software";
+            Boolean gameOrSoftware = rbGame.isArmed();
             String exec = ea.getText().isEmpty() ? null : ea.getText();
             
             
@@ -185,16 +191,17 @@ public class PropertiesPane extends VBox {
                                "Release Year: " + releaseYear + "\n" +
                                "Description: " + description  + "\n" +
                                "Categorie: " + categorie + "\n" +
-                               "Game or Software: " + gameOrSoftware + "\n" +
+                               "Game or Software: " + (gameOrSoftware ? "Game" : "Software") + "\n" +
                                "Executable Arguments: " + exec + "\n");
             if (nameOfTheApp != null && path != null) {
+                addApp(new App(image, nameOfTheApp, path, Integer.parseInt(releaseYear), description, gameOrSoftware));
                 reset();
             } else {
                 if (nameOfTheApp == null) { tf.setStyle(tf.getStyle() + "-fx-prompt-text-fill: #c71423;");}
                 if (path == null) {pp.getText().setTextFill(Color.web("#c71423"));}
             }
-        });        
-        
+        });
+
         super.getChildren().addAll(
                 fp,
                 tf,
@@ -205,8 +212,14 @@ public class PropertiesPane extends VBox {
                 ea,
                 text,
                 bt
-                
         );
+    }
+    
+    public void setAppScene(App app) {
+        //todo
+    }
+    public void addApp(App app) {
+        apps.getChildren().add(app);
     }
     
     

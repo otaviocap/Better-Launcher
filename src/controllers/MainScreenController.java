@@ -61,7 +61,7 @@ public class MainScreenController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         lnDefaults.put("close", closeButton.getFill());
         lnDefaults.put("minimize", minimizeButton.getFill());
-        masterPane.setRight(new PropertiesPane());
+        masterPane.setRight(new PropertiesPane(apps));
         properties = (PropertiesPane) masterPane.getRight();
                 
         makeDraggable();
