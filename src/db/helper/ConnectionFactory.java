@@ -8,7 +8,7 @@ public class ConnectionFactory {
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/launcher?useSSL=false",
+                "jdbc:mysql://localhost:3306/Launcher?useSSL=false",
                 "root",
                 "root");
     }
@@ -19,10 +19,10 @@ public class ConnectionFactory {
             con = getConnection();
 
         } catch (SQLException ex) {
-            System.out.println("Erro ao conectar ao banco de dados");
+            System.out.println("Error while trying to connect to the mysql server");
         }
         if (con != null) {
-            System.out.println("Conectado!");
+            System.out.println("Conected!");
             con.close();
         }
     }

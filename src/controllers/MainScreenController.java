@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
 import classes.App;
@@ -61,7 +56,7 @@ public class MainScreenController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         lnDefaults.put("close", closeButton.getFill());
         lnDefaults.put("minimize", minimizeButton.getFill());
-        masterPane.setRight(new PropertiesPane(apps));
+        masterPane.setRight(new PropertiesPane());
         properties = (PropertiesPane) masterPane.getRight();
                 
         makeDraggable();
@@ -106,7 +101,7 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void addButtonAction(ActionEvent event) {
-        properties.setAddScene();
+        properties.setAddApp();
     }
 
     @FXML

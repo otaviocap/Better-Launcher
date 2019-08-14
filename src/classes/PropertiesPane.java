@@ -1,10 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package classes;
 
+import db.daos.AppDao;
+import java.util.ArrayList;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,7 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.Label; 
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -27,12 +24,9 @@ import javafx.stage.Stage;
 
 
 public class PropertiesPane extends VBox {
-    
-    private TilePane apps;
-    
-    public PropertiesPane(TilePane Apps) {
+        
+    public PropertiesPane() {
         super();
-        this.apps = apps;
         reset();
     }
     
@@ -46,7 +40,7 @@ public class PropertiesPane extends VBox {
         super.setSpacing(20);
     }
     
-    public void setAddScene() {
+    public void setAddApp() {
         reset();
         
         //File Picker
@@ -179,7 +173,7 @@ public class PropertiesPane extends VBox {
             String path = pp.getFile() != null ? pp.getFile().getAbsolutePath() : null;
             String releaseYear = ry.getText().isEmpty() ? null : ry.getText();
             String description = ds.getText().isEmpty() ? null : ds.getText();
-            Object categorie = cb.getValue() != null ? cb.getValue() : null;
+            Object categories = cb.getValue() != null ? cb.getValue() : null;
             Boolean gameOrSoftware = rbGame.isArmed();
             String exec = ea.getText().isEmpty() ? null : ea.getText();
             
@@ -190,11 +184,13 @@ public class PropertiesPane extends VBox {
                                "Path of the exec: " + path + "\n" +
                                "Release Year: " + releaseYear + "\n" +
                                "Description: " + description  + "\n" +
-                               "Categorie: " + categorie + "\n" +
+                               "Categorie: " + categories + "\n" +
                                "Game or Software: " + (gameOrSoftware ? "Game" : "Software") + "\n" +
                                "Executable Arguments: " + exec + "\n");
             if (nameOfTheApp != null && path != null) {
-                addApp(new App(image, nameOfTheApp, path, Integer.parseInt(releaseYear), description, gameOrSoftware));
+                ArrayList<String> al = new ArrayList<>();
+                al.add((String) categories);
+                new AppDao().add(new App(nameOfTheApp, path, Integer.parseInt(releaseYear), description, gameOrSoftware, al, exec, image));
                 reset();
             } else {
                 if (nameOfTheApp == null) { tf.setStyle(tf.getStyle() + "-fx-prompt-text-fill: #c71423;");}
@@ -217,9 +213,6 @@ public class PropertiesPane extends VBox {
     
     public void setAppScene(App app) {
         //todo
-    }
-    public void addApp(App app) {
-        apps.getChildren().add(app);
     }
     
     
