@@ -1,4 +1,4 @@
-package classes;
+package classes.javaFx;
 
 import java.io.File;
 import javafx.event.ActionEvent;

@@ -1,6 +1,6 @@
 package db.tests;
 
-import classes.App;
+import classes.java.App;
 import db.daos.AppDao;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package classes;
+package classes.javaFx;
 
+import classes.java.App;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,10 +21,6 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
-/**
- *
- * @author otavi
- */
 public class AppFx extends StackPane {
     
     //interface vars
@@ -39,44 +31,23 @@ public class AppFx extends StackPane {
     //app vars
     App app;
     
-    
-    public AppFx(String name) {
+    public AppFx(App app) {
         super();
-        app = new App();
-        enableContextMenu();
-        this.app.setName(name);
-        text = new Label(this.app.getName());
-        setDefaults();
-        super.getChildren().add(background);
-        super.getChildren().add(text);
-    }
-
-    public AppFx(String name, String pathExec, 
-            int releaseYear, String description, boolean isGame, List<String> categories, String args, String imgUrl) {
-        super();
-        app = new App(name, pathExec, releaseYear, description, isGame, categories, args, imgUrl);
-        enableContextMenu();
-        this.text = new Label(this.app.getName());
+        this.app = app;
         
-        setDefaults();
-        super.getChildren().add(background);
-        super.getChildren().add(text);
-    }
-    
-    public AppFx(String name, String pathExec, 
-          int releaseYear, String description, boolean isGame, List<String> categories, String args) {
-        super();
-        app = new App(name, pathExec, releaseYear, description, isGame, categories, args);
+        text = new Label(this.app.getName());
+        
         enableContextMenu();
-        this.text = new Label(this.app.getName());
-
         setDefaults();
-        super.getChildren().add(background);
-        super.getChildren().add(text);
+        
+       getChildren().add(background);
+       getChildren().add(text);
     }
     
     private void setDefaults() {
         //background
+        super.setMaxWidth(145);
+        super.setMaxHeight(202);
         background.setWidth(145);
         background.setHeight(202);
         background.setArcHeight(10);
@@ -138,7 +109,8 @@ public class AppFx extends StackPane {
     }
 
     public boolean hasImage() {
-        return !app.getImgUrl().isEmpty();
+        return false;
+        // return !app.getImgUrl().isEmpty();
     }
 
     

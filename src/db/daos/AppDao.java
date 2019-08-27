@@ -1,6 +1,6 @@
 package db.daos;
 
-import classes.App;
+import classes.java.App;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
