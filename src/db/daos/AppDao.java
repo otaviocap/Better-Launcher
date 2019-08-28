@@ -1,6 +1,7 @@
 package db.daos;
 
 import classes.java.App;
+import classes.java.Category;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -57,7 +58,6 @@ public class AppDao implements Dao<App> {
                 stmt.setString(2, app.getDescription());
                 stmt.setInt(3, app.getReleaseYear());
                 stmt.setString(4, app.getImgUrl());
-                stmt.setInt(5, app.getTimesExecuted());
                 stmt.execute();
             }
         } catch (SQLException e) {
@@ -65,15 +65,30 @@ public class AppDao implements Dao<App> {
             return false;
         }
         app.setId(id);
+        
+        //Registering the software with the categories
+        sql = db.helper.cons.CategorySoftware.INSERT;
+        for (Category c: app.getCategories()) {
+            try {
+                try (Connection connection = ConnectionFactory.getConnection();
+                    PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                    stmt.setInt(1, c.getId());
+                    stmt.setInt(2, app.getId());
+                    stmt.execute();
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                return false;
+            }
+        }
         return true;
     }
 
     @Override
     public boolean alter(App app) {
                 
-        //Registering in software table
+        //Altering in software table
         String sql = db.helper.cons.Software.UPDATE;
-        int id;
         try {
             try (Connection connection = ConnectionFactory.getConnection();
                     PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -90,7 +105,7 @@ public class AppDao implements Dao<App> {
             return false;
         }
         
-        //Regestering the software in info
+        //Altering the software in info
         sql = db.helper.cons.Info.UPDATE;
         try {
             try (Connection connection = ConnectionFactory.getConnection();
@@ -107,12 +122,44 @@ public class AppDao implements Dao<App> {
             return false;
         }
         
+        //Removing all the categories
+        sql = db.helper.cons.CategorySoftware.REMOVEALLBYSOFTWARE;
+        try {
+            try (Connection connection = ConnectionFactory.getConnection();
+                    PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                stmt.setInt(1, app.getId());                
+                stmt.execute();
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        
+        sql = db.helper.cons.CategorySoftware.INSERT;
+        for (Category c: app.getCategories()) {
+            try {
+                try (Connection connection = ConnectionFactory.getConnection();
+                    PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                    stmt.setInt(1, c.getId());
+                    stmt.setInt(2, app.getId());
+                    stmt.execute();
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                return false;
+            }
+        }
         return true;
     }
 
     @Override
     public boolean remove(App app) {
         try {
+            try (Connection connection = ConnectionFactory.getConnection();
+                    PreparedStatement stmt = connection.prepareStatement(db.helper.cons.CategorySoftware.REMOVEALLBYSOFTWARE)) {
+                stmt.setInt(1, app.getId());
+                stmt.execute();
+            }
             try (Connection connection = ConnectionFactory.getConnection();
                     PreparedStatement stmt = connection.prepareStatement(db.helper.cons.Info.REMOVE)) {
                 stmt.setInt(1, app.getId());
@@ -123,6 +170,7 @@ public class AppDao implements Dao<App> {
                 stmt.setInt(1, app.getId());
                 stmt.execute();
             }
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
@@ -151,6 +199,7 @@ public class AppDao implements Dao<App> {
                     ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     App a = new App();
+                    ArrayList<Category> categories = new ArrayList<>();
                     a.setId(rs.getInt("softwareId"));
                     a.setName(rs.getString("name"));
                     a.setIsGame(rs.getBoolean("isAGame"));
@@ -160,6 +209,7 @@ public class AppDao implements Dao<App> {
                     a.setReleaseYear(rs.getInt("yearReleased"));
                     a.setImgUrl(rs.getString("picture"));
                     a.setTimesExecuted(rs.getInt("timesExecuted"));
+                    a.setCategories(new CategoryDao().searchBySoftwareId(a.getId()));
                     apps.add(a);
                 }
             }

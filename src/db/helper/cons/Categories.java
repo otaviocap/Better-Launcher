@@ -13,5 +13,7 @@ public class Categories {
     
     public static final String SEARCH = "select * from Categories";   
     
+    public static final String SEARCHBYID = "select * from Categories where categoryId=?"; 
+    
     public static final String SEARCHGAMES = "select * from Categories where isForAGame=?";
 }

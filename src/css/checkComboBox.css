@@ -1,0 +1,6 @@
+.check-combo-box > .combo-box {
+    -fx-background-radius: 8px;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4ab1ff, #2bffc3);
+    -fx-prompt-text-fill: #000000;
+    -fx-font-family: Montserrat;
+}

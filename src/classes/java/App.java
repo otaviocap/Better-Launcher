@@ -5,18 +5,20 @@ import java.util.Objects;
 
 public class App {
     
-    private String imgUrl;
-    private String name;
-    private String pathExec;
-    private int releaseYear;
-    private String description;
-    private boolean isGame;
-    private List<String> categories;
-    private String args;
-    private int timesExecuted = 0;
     private int id; // The id will be generated after being added to the database;
+    private String name;
+    private boolean isGame;
+    private String pathExec;
+    private String args;
+    
+    private String description;
+    private String imgUrl;
+    private int releaseYear;
+    
+    private List<Category> categories;
+    private int timesExecuted = 0;
 
-    public App(String name, String pathExec, int releaseYear, String description, boolean isGame, List<String> categories, String args, String imageUrl) {
+    public App(String name, String pathExec, int releaseYear, String description, boolean isGame, List<Category> categories, String args, String imageUrl) {
         this.name = name;
         this.pathExec = pathExec;
         this.releaseYear = releaseYear;
@@ -27,7 +29,7 @@ public class App {
         this.imgUrl = imageUrl;
     }
     
-     public App(String name, String pathExec, int releaseYear, String description, boolean isGame, List<String> categories, String args) {
+     public App(String name, String pathExec, int releaseYear, String description, boolean isGame, List<Category> categories, String args) {
         this.imgUrl = "";
         this.name = name;
         this.pathExec = pathExec;
@@ -67,7 +69,7 @@ public class App {
         return isGame;
     }
 
-    public List<String> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
 
@@ -99,7 +101,7 @@ public class App {
         this.isGame = isGame;
     }
 
-    public void setCategories(List<String> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
 

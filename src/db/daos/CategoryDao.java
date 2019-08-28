@@ -142,6 +142,36 @@ public class CategoryDao implements Dao<Category> {
         return Categories;
     }
     
+    public Category searchByName(String name) {
+        List<Category> categories = searchAll();
+        for (Category c : categories) {
+            if (c.getName().equals(name)) {
+                return c;
+            }
+        } 
+        return null;
+    }
+ 
+    public List<Category> searchBySoftwareId(int sid) {
+        List<Category> Categories = new ArrayList();
+        try {
+            try (Connection connection = ConnectionFactory.getConnection();
+                    PreparedStatement stmt = connection.prepareStatement(db.helper.cons.CategorySoftware.SEARCHBYSOFTWAREGETCATEGORIES)) {
+                stmt.setInt(1, sid);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    Category a = new Category();
+                    a.setId(rs.getInt("categoryId"));
+                    a.setName(rs.getString("name"));
+                    a.setIsForAGame(rs.getBoolean("isForAGame"));
+                    Categories.add(a);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return Categories;
+    }
     
     
 }

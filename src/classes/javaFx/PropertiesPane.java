@@ -13,14 +13,21 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label; 
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
+import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.CheckModel;
 
 public class PropertiesPane extends VBox {
     
@@ -124,8 +131,6 @@ public class PropertiesPane extends VBox {
                     +   "-fx-font-family: Montserrat;"
             );
 
-            rbSoftware.fire();
-
             hb2.getChildren().addAll(rbGame, rbSoftware);
             hb2.setAlignment(Pos.CENTER);
             hb2.setSpacing(10);
@@ -133,7 +138,24 @@ public class PropertiesPane extends VBox {
 
 
             //Categories
-            ComboBox cb = new ComboBox();
+            ArrayList<Category> categories = new ArrayList<>();
+            
+            HBox hb3 = new HBox();
+            
+            Button btAdd = new Button(">>>");
+            btAdd.setPrefWidth(100);
+            btAdd.setPrefHeight(50);
+            hb3.setSpacing(5d);
+            
+            Label lb = new Label("Categories selected: ");
+            
+            btAdd.setStyle("-fx-background-radius: 8;"
+                    +   "-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4ab1ff, #2bffc3);"
+                    +   "-fx-prompt-text-fill: #000000;"
+                    +   "-fx-font-family: Montserrat;"
+            );
+            
+            ComboBox<Category> cb = new ComboBox();
             cb.setStyle("-fx-background-radius: 8;"
                     +   "-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #4ab1ff, #2bffc3);"
                     +   "-fx-prompt-text-fill: #000000;"
@@ -141,7 +163,6 @@ public class PropertiesPane extends VBox {
             );
             cb.setPrefHeight(50);
             cb.setPrefWidth(300);
-            cb.setPromptText("Categories");
             
             CategoryDao cd = new CategoryDao();
             List<Category> lc = new ArrayList<>();
@@ -149,14 +170,47 @@ public class PropertiesPane extends VBox {
             
             rbSoftware.setOnAction((event) -> {
                 lc.clear();
+                categories.clear();
+                lb.setText("Categories selected: ");
                 cd.searchForGames(false).forEach((e) -> lc.add(e));
                 cb.getItems().setAll(lc);
             });
             rbGame.setOnAction((event) -> {
                 lc.clear();
+                categories.clear();
+                lb.setText("Categories selected: ");
                 cd.searchForGames(true).forEach((e) -> lc.add(e));
                 cb.getItems().setAll(lc);
             });
+            
+            cb.setConverter(new StringConverter<Category>() {
+                @Override
+                public String toString(Category c) {
+                    return c.getName();
+                }
+
+                @Override
+                public Category fromString(String name) {
+                    return new CategoryDao().searchByName(name);
+                }
+            });
+            
+            btAdd.setOnAction((event) -> {
+                if (categories.contains(cb.getValue())) {
+                    categories.remove(cb.getValue());
+                } else {
+                    categories.add(cb.getValue());
+                }
+                lb.setText("Categories selected: "+ categories.toString());
+                
+            });
+            
+            
+            
+            hb3.getChildren().addAll(cb, btAdd);
+            
+            rbSoftware.fire();
+            
             
             //Advanced Options
             TextField ea = new TextField();
@@ -191,7 +245,7 @@ public class PropertiesPane extends VBox {
                 String path = pp.getFile() != null ? pp.getFile().getAbsolutePath() : null;
                 String releaseYear = ry.getText().isEmpty() ? null : ry.getText();
                 String description = ds.getText().isEmpty() ? null : ds.getText();
-                Object categories = cb.getValue() != null ? cb.getValue() : null;
+                Category category = cb.getValue() != null ? cb.getValue() : null;
                 Boolean gameOrSoftware = rbGame.isSelected();
                 String exec = ea.getText().isEmpty() ? null : ea.getText();
 
@@ -202,13 +256,11 @@ public class PropertiesPane extends VBox {
                                    "Path of the exec: " + path + "\n" +
                                    "Release Year: " + releaseYear + "\n" +
                                    "Description: " + description  + "\n" +
-                                   "Categorie: " + categories + "\n" +
+                                   "Categorie: " + category.toString() + "\n" +
                                    "Game or Software: " + (gameOrSoftware ? "Game" : "Software") + "\n" +
                                    "Executable Arguments: " + exec + "\n");
                 if (nameOfTheApp != null && path != null) {
-                    ArrayList<String> al = new ArrayList<>();
-                    al.add((String) categories);
-                    new AppDao().add(new App(nameOfTheApp, path, Integer.parseInt(releaseYear), description, gameOrSoftware, al, exec, image));
+                    new AppDao().add(new App(nameOfTheApp, path, Integer.parseInt(releaseYear), description, gameOrSoftware, categories, exec, image));
                     reset();
                 } else {
                     if (nameOfTheApp == null) { tf.setStyle(tf.getStyle() + "-fx-prompt-text-fill: #c71423;");}
@@ -222,7 +274,8 @@ public class PropertiesPane extends VBox {
                     pp,
                     hb1,
                     hb2,
-                    cb,
+                    hb3,
+                    lb,
                     ea,
                     text,
                     bt
