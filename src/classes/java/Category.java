@@ -1,5 +1,7 @@
 package classes.java;
 
+import java.util.Objects;
+
 public class Category {
     
     private String Name;
@@ -41,5 +43,32 @@ public class Category {
     public String toString() {
         return this.Name;
     }
+    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Category other = (Category) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (!Objects.equals(this.Name, other.Name)) {
+            return false;
+        }
+        if (!Objects.equals(this.isForAGame, other.isForAGame)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
     
 }

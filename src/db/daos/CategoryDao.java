@@ -89,7 +89,7 @@ public class CategoryDao implements Dao<Category> {
 
     @Override
     public boolean search(Category c) {
-        List<Category> todos = searchAll();
+        ArrayList<Category> todos = searchAll();
 
         for (Category ca : todos) {
             if (c.equals(ca)) {
@@ -100,8 +100,8 @@ public class CategoryDao implements Dao<Category> {
     }
 
     @Override
-    public List<Category> searchAll() {
-        List<Category> Categories = new ArrayList();
+    public ArrayList<Category> searchAll() {
+        ArrayList<Category> Categories = new ArrayList();
         try {
             try (Connection connection = ConnectionFactory.getConnection();
                     PreparedStatement stmt = connection.prepareStatement(db.helper.cons.Categories.SEARCH);
@@ -120,8 +120,8 @@ public class CategoryDao implements Dao<Category> {
         return Categories;
     }
     
-    public List<Category> searchForGames(Boolean bool) {
-        List<Category> Categories = new ArrayList();
+    public ArrayList<Category> searchForGames(boolean bool) {
+        ArrayList<Category> Categories = new ArrayList();
         try {
             try (Connection connection = ConnectionFactory.getConnection();
                     PreparedStatement stmt = connection.prepareStatement(db.helper.cons.Categories.SEARCHGAMES)) {
@@ -152,8 +152,8 @@ public class CategoryDao implements Dao<Category> {
         return null;
     }
  
-    public List<Category> searchBySoftwareId(int sid) {
-        List<Category> Categories = new ArrayList();
+    public ArrayList<Category> searchBySoftwareId(int sid) {
+        ArrayList<Category> Categories = new ArrayList();
         try {
             try (Connection connection = ConnectionFactory.getConnection();
                     PreparedStatement stmt = connection.prepareStatement(db.helper.cons.CategorySoftware.SEARCHBYSOFTWAREGETCATEGORIES)) {

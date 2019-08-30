@@ -72,6 +72,7 @@ public class AppDao implements Dao<App> {
             try {
                 try (Connection connection = ConnectionFactory.getConnection();
                     PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                    System.out.println(c.getName());
                     stmt.setInt(1, c.getId());
                     stmt.setInt(2, app.getId());
                     stmt.execute();
@@ -203,12 +204,38 @@ public class AppDao implements Dao<App> {
                     a.setId(rs.getInt("softwareId"));
                     a.setName(rs.getString("name"));
                     a.setIsGame(rs.getBoolean("isAGame"));
-                    a.setPathExec(rs.getString("pathToExecutable"));
-                    a.setArgs(rs.getString("execParams"));
-                    a.setDescription(rs.getString("info"));
-                    a.setReleaseYear(rs.getInt("yearReleased"));
-                    a.setImgUrl(rs.getString("picture"));
-                    a.setTimesExecuted(rs.getInt("timesExecuted"));
+                    a.setPathExec(rs.getString("pathExec"));
+                    a.setArgs(rs.getString("args"));
+                    a.setDescription(rs.getString("description"));
+                    a.setReleaseYear(rs.getInt("releaseYear"));
+                    a.setImgUrl(rs.getString("imgUrl") == null ? "" : rs.getString("imgUrl"));
+                    a.setCategories(new CategoryDao().searchBySoftwareId(a.getId()));
+                    apps.add(a);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return apps;
+    }
+    
+    public List<App> searchByFilters() {
+        List<App> apps = new ArrayList();
+        try {
+            try (Connection connection = ConnectionFactory.getConnection();
+                    PreparedStatement stmt = connection.prepareStatement(db.helper.cons.InfoSoftware.SEARCH);
+                    ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    App a = new App();
+                    ArrayList<Category> categories = new ArrayList<>();
+                    a.setId(rs.getInt("softwareId"));
+                    a.setName(rs.getString("name"));
+                    a.setIsGame(rs.getBoolean("isAGame"));
+                    a.setPathExec(rs.getString("pathExec"));
+                    a.setArgs(rs.getString("args"));
+                    a.setDescription(rs.getString("description"));
+                    a.setReleaseYear(rs.getInt("releaseYear"));
+                    a.setImgUrl(rs.getString("imgUrl"));
                     a.setCategories(new CategoryDao().searchBySoftwareId(a.getId()));
                     apps.add(a);
                 }

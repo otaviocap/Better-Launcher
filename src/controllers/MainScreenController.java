@@ -1,21 +1,26 @@
 package controllers;
 
+import classes.helper.Filter;
 import classes.java.Category;
 import classes.javaFx.AppFx;
 import classes.javaFx.CategoriesPane;
+import classes.javaFx.CategoryFx;
 import classes.javaFx.PropertiesPane;
 import db.daos.AppDao;
 import db.daos.CategoryDao;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
@@ -43,6 +48,8 @@ public class MainScreenController implements Initializable {
     private double x = 0, y = 0;
     
     private int c = 0;
+    
+    private ArrayList<Category> filters = new ArrayList<>();
 
     
     @FXML
@@ -67,20 +74,41 @@ public class MainScreenController implements Initializable {
     
     private PropertiesPane properties;
     private VBox categories;
+    private HashMap<Integer, ArrayList<Category>> AllCategories;
+    private ArrayList<AppFx> appsFx = new ArrayList<>();
+    
+    private boolean[] categoriesSet = {false, false};
+
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         lnDefaults.put("close", closeButton.getFill());
         lnDefaults.put("minimize", minimizeButton.getFill());
-        masterPane.setRight(new PropertiesPane());
+        masterPane.setRight(new PropertiesPane(this));
         properties = (PropertiesPane) masterPane.getRight();
-        categories = (VBox) masterPane.getLeft();
-        categories.setBackground(Background.EMPTY);
+        ((VBox) masterPane.getLeft()).setBackground(Background.EMPTY);
+        categories = ((VBox) ((ScrollPane) ((VBox) masterPane.getLeft()).getChildren().get(6)).getContent());
         
-        getApps();
-        getCategories();
-                
+        AllCategories = new HashMap<>();
+
+        
+        categories.setAlignment(Pos.TOP_CENTER);
+        categories.setSpacing(10d);
+        
+        refreshApps();
+        
         makeDraggable();
+    }
+    @FXML
+    private void gamesButtonAction(ActionEvent event) {
+        Filter.clear();
+        refreshCategories(true);
+    }
+
+    @FXML
+    private void softwareButtonAction(ActionEvent event) {
+        Filter.clear();
+        refreshCategories(false);
     }    
 
     @FXML
@@ -141,17 +169,64 @@ public class MainScreenController implements Initializable {
         properties.setAddAppScene();
     }
 
-    private void getApps() {
+    public void refreshApps() {
         AppDao ad = new AppDao();
-        List<AppFx> appsFx = new ArrayList<>();
+        apps.getChildren().removeAll(appsFx);
+        appsFx.clear();
         ad.searchAll().forEach((app) -> {
-            appsFx.add(new AppFx(app));
+            System.out.println("fora");
+            if (Filter.checkApp(app)) {
+                System.out.println("Dentro");
+                appsFx.add(new AppFx(app, this));
+            }
         });
         apps.getChildren().addAll(appsFx);
     }
     
-    private void getCategories() { 
+    public void refreshCategories(boolean game) {
         CategoryDao cd = new CategoryDao();
-        ((VBox) ((ScrollPane) categories.getChildren().get(6)).getContent()).getChildren().add(new Label("Veio de dentro")); 
+        
+        categories.getChildren().clear();
+        
+        if (!game) {
+            AllCategories.remove(0);
+            AllCategories.put(0, cd.searchForGames(false));
+            getCategories(game);
+        } else {
+            AllCategories.remove(1);
+            AllCategories.put(1, cd.searchForGames(true));
+            getCategories(game);
+        }
+    }
+    
+    private void getCategories(boolean game) { 
+        categories.getChildren().clear();
+        if ((categoriesSet[0] == true && game) || (categoriesSet[1] && !game)) {
+            categoriesSet[0] = false;
+            categoriesSet[1] = false;
+            game = false;
+            refreshApps();
+            Filter.clear();
+        } else {
+            if (game) {
+                categoriesSet[0] = true;
+                Filter.setIsForGame(true);
+            } else {
+                categoriesSet[1] = true;
+                Filter.setIsForGame(false);
+            }
+            ArrayList<Category> cs = AllCategories.get(game ? 1 : 0);
+            cs.sort(new Comparator<Category>() {
+                        @Override
+                        public int compare(final Category object1, final Category object2) {
+                            return object1.getName().compareTo(object2.getName());
+                        }
+                    });
+            for (Category c: cs) {
+                categories.getChildren().add(new CategoryFx(c, this));
+            }
+            refreshApps();
+        }
+        
     }
 }

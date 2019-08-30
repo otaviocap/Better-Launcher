@@ -1,6 +1,8 @@
 package classes.javaFx;
 
 import classes.java.App;
+import controllers.MainScreenController;
+import db.daos.AppDao;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,13 +29,15 @@ public class AppFx extends StackPane {
     private Rectangle background = new Rectangle();
     private Label text;
     private ContextMenu cm;
+    private MainScreenController msc;
     
     //app vars
     App app;
     
-    public AppFx(App app) {
+    public AppFx(App app, MainScreenController msc) {
         super();
         this.app = app;
+        this.msc = msc;
         
         text = new Label(this.app.getName());
         
@@ -54,8 +58,15 @@ public class AppFx extends StackPane {
         background.setArcWidth(10);
         
         if (hasImage()) {
-            Image img = new Image("file:///"+app.getImgUrl());
-            background.setFill(new ImagePattern(img));
+            try {
+                Image img = new Image("file:///"+app.getImgUrl());
+                background.setFill(new ImagePattern(img));
+                text.setVisible(false);
+            } catch (Exception e) {
+                app.setImgUrl("");
+                text.setVisible(true);
+                setDefaults();
+            }
         } else {
             Stop[] stops = new Stop[]{new Stop(0, Color.web("#4ab1ff")), new Stop(1, Color.web("#2bffc3"))};
             background.setFill(new LinearGradient(0, 0, 1.0, 1.0, true, CycleMethod.REFLECT, stops));
@@ -73,14 +84,15 @@ public class AppFx extends StackPane {
                 new MenuItem("Remove"),
                 new MenuItem("Edit"));
         
-        cm.getItems().get(1).setOnAction(new EventHandler<ActionEvent>() {
+        cm.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println(me.getText());
+                new AppDao().remove(app);
+                msc.refreshApps();
             }
         });
         
-        //Context menu action
+        //Context menu enable action
         this.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
  
             @Override
@@ -109,8 +121,7 @@ public class AppFx extends StackPane {
     }
 
     public boolean hasImage() {
-        return false;
-        // return !app.getImgUrl().isEmpty();
+        return !app.getImgUrl().equals("");
     }
 
     

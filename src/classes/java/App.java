@@ -1,5 +1,6 @@
 package classes.java;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,10 +16,10 @@ public class App {
     private String imgUrl;
     private int releaseYear;
     
-    private List<Category> categories;
+    private ArrayList<Category> categories;
     private int timesExecuted = 0;
 
-    public App(String name, String pathExec, int releaseYear, String description, boolean isGame, List<Category> categories, String args, String imageUrl) {
+    public App(String name, String pathExec, int releaseYear, String description, boolean isGame, ArrayList<Category> categories, String args, String imageUrl) {
         this.name = name;
         this.pathExec = pathExec;
         this.releaseYear = releaseYear;
@@ -29,7 +30,7 @@ public class App {
         this.imgUrl = imageUrl;
     }
     
-     public App(String name, String pathExec, int releaseYear, String description, boolean isGame, List<Category> categories, String args) {
+     public App(String name, String pathExec, int releaseYear, String description, boolean isGame, ArrayList<Category> categories, String args) {
         this.imgUrl = "";
         this.name = name;
         this.pathExec = pathExec;
@@ -101,7 +102,7 @@ public class App {
         this.isGame = isGame;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(ArrayList<Category> categories) {
         this.categories = categories;
     }
 
