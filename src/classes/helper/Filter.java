@@ -4,7 +4,6 @@ import classes.java.App;
 import classes.java.Category;
 import classes.javaFx.CategoryFx;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class Filter {

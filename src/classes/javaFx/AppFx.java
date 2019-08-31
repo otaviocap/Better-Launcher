@@ -85,10 +85,20 @@ public class AppFx extends StackPane {
         AppFx me = this;
         
         cm = new ContextMenu(
-                new MenuItem("Remove"),
-                new MenuItem("Edit"));
+                new MenuItem("Edit"),
+                new MenuItem("Remove"));
         
+        
+        // Edit option
         cm.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                msc.setEditApp(app);
+            }
+        });
+
+        // Remove option
+        cm.getItems().get(1).setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 new AppDao().remove(app);
@@ -96,7 +106,8 @@ public class AppFx extends StackPane {
             }
         });
         
-        //Context menu enable action
+        
+        // Context menu enable action
         this.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
  
             @Override

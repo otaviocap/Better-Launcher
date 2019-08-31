@@ -76,6 +76,16 @@ public class CategoryDao implements Dao<Category> {
     public boolean remove(Category c) {
         try {
             try (Connection connection = ConnectionFactory.getConnection();
+                    PreparedStatement stmt = connection.prepareStatement(db.helper.cons.CategorySoftware.REMOVEALLBYCATEGORY)) {
+                stmt.setInt(1, c.getId());
+                stmt.execute();
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        try {
+            try (Connection connection = ConnectionFactory.getConnection();
                     PreparedStatement stmt = connection.prepareStatement(db.helper.cons.Categories.REMOVE)) {
                 stmt.setInt(1, c.getId());
                 stmt.execute();

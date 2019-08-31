@@ -114,8 +114,7 @@ public class AppDao implements Dao<App> {
                 stmt.setString(1, app.getDescription());
                 stmt.setInt(2, app.getReleaseYear());
                 stmt.setString(3, app.getImgUrl());
-                stmt.setInt(4, app.getTimesExecuted());
-                stmt.setInt(5, app.getId());                
+                stmt.setInt(4, app.getId());                
                 stmt.execute();
             }
         } catch (SQLException e) {

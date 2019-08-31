@@ -1,24 +1,16 @@
 package classes.javaFx;
 
 import java.io.File;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Side;
 import javafx.scene.Node;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -42,6 +34,8 @@ public class FilePicker extends StackPane {
     }
     
     private void actions() {
+        
+        // This will set up the action of the file picker
         this.setOnMouseClicked((event) -> {
             file = fileChooser.showOpenDialog(((Stage) ((Node) event.getSource()).getScene().getWindow()));
             if (file != null) {
@@ -57,7 +51,7 @@ public class FilePicker extends StackPane {
     }
     
     private void setDefaults() {
-        //background
+        // Background
         rec.setWidth(145);
         rec.setHeight(202);
         rec.setArcHeight(10);
@@ -65,11 +59,11 @@ public class FilePicker extends StackPane {
         Stop[] stops = new Stop[]{new Stop(0, Color.web("#4ab1ff")), new Stop(1, Color.web("#2bffc3"))};
         rec.setFill(new LinearGradient(0, 0, 1.0, 1.0, true, CycleMethod.REFLECT, stops));
       
-        //text
+        // Text
         text.setStyle("-fx-font-family: Montserrat; -fx-font-size: 15;"); 
     }
     
-    private void setImageAsBackground(String imgUrl) {
+    public void setImageAsBackground(String imgUrl) {
         Image img = new Image("file:///"+imgUrl);
         System.out.println("file://"+imgUrl);
         rec.setFill(new ImagePattern(img));
@@ -93,6 +87,14 @@ public class FilePicker extends StackPane {
     
     public Rectangle getRect() {
         return rec;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+
+    public void setIsAnImagePicker(Boolean isAnImagePicker) {
+        this.isAnImagePicker = isAnImagePicker;
     }
     
     
