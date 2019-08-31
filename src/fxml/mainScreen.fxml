@@ -20,27 +20,35 @@
    <top>
       <HBox fx:id="parent" alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="1343.0" spacing="5.0" style="-fx-background-color: #C4C4C4;" BorderPane.alignment="CENTER">
          <children>
-            <Circle fx:id="minimizeButton" onMouseEntered="#minimizeButtonEntered" onMouseExited="#minimizeButtonExited" onMousePressed="#minimizeAction" radius="9.0" stroke="TRANSPARENT" strokeType="INSIDE">
-               <fill>
-                  <LinearGradient endX="1.0" endY="1.0">
-                     <stops>
-                        <Stop color="#4ab1ff" />
-                        <Stop color="#70b1ff" offset="0.007662835249042145" />
-                        <Stop color="#2bffc3" offset="1.0" />
-                     </stops>
-                  </LinearGradient>
-               </fill>
-            </Circle>
-            <Circle fx:id="closeButton" onMouseEntered="#closeButtonEntered" onMouseExited="#closeButtonExited" onMousePressed="#closeAction" radius="9.0" stroke="#ffffff00" strokeType="INSIDE">
-               <fill>
-                  <LinearGradient endX="1.0" endY="1.0">
-                     <stops>
-                        <Stop color="#ffa6a6" />
-                        <Stop color="RED" offset="1.0" />
-                     </stops>
-                  </LinearGradient>
-               </fill>
-            </Circle>
+            <HBox prefHeight="26.0" prefWidth="674.0" />
+            <HBox alignment="TOP_RIGHT" prefHeight="26.0" prefWidth="696.0" spacing="5.0">
+               <children>
+                  <Circle fx:id="minimizeButton" onMouseEntered="#minimizeButtonEntered" onMouseExited="#minimizeButtonExited" onMousePressed="#minimizeAction" radius="9.0" stroke="TRANSPARENT" strokeType="INSIDE">
+                     <fill>
+                        <LinearGradient endX="1.0" endY="1.0">
+                           <stops>
+                              <Stop color="#4ab1ff" />
+                              <Stop color="#70b1ff" offset="0.007662835249042145" />
+                              <Stop color="#2bffc3" offset="1.0" />
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                  </Circle>
+                  <Circle fx:id="closeButton" onMouseEntered="#closeButtonEntered" onMouseExited="#closeButtonExited" onMousePressed="#closeAction" radius="9.0" stroke="#ffffff00" strokeType="INSIDE">
+                     <fill>
+                        <LinearGradient endX="1.0" endY="1.0">
+                           <stops>
+                              <Stop color="#ffa6a6" />
+                              <Stop color="RED" offset="1.0" />
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                  </Circle>
+               </children>
+               <padding>
+                  <Insets right="5.0" top="5.0" />
+               </padding>
+            </HBox>
          </children>
          <opaqueInsets>
             <Insets />

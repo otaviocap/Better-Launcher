@@ -5,11 +5,15 @@ import classes.java.Category;
 import controllers.MainScreenController;
 import db.daos.AppDao;
 import db.daos.CategoryDao;
+import java.io.IOException;
+import static java.lang.Compiler.command;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,12 +21,28 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label; 
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.util.StringConverter;
 
@@ -39,14 +59,20 @@ public class PropertiesPane extends VBox {
         
     }
     
+    private void setDarkerBackground() {
+        Stop[] stops = new Stop[]{new Stop(0, Color.web("#53FA82")), new Stop(1, Color.web("#4ba364"))};
+        setBackground(new Background(new BackgroundFill(new LinearGradient(.5, .5, 1.5, 1.5, true, CycleMethod.REFLECT, stops), CornerRadii.EMPTY, Insets.EMPTY)));
+    }
+    
     public void reset() {
         super.getChildren().clear();
         super.setAlignment(Pos.TOP_CENTER);
         super.setPrefHeight(638);
         super.setPrefWidth(300);
-        super.setStyle("-fx-background-color: #53FA82;");
+        super.setBackground(new Background(new BackgroundFill(Color.web("53FA82"), CornerRadii.EMPTY, Insets.EMPTY)));
         super.setPadding(new Insets(10, 10, 10, 10));
         super.setSpacing(20);
+        super.setEffect(null);
     }
     
     private TextField customTf(String name) {
@@ -243,6 +269,8 @@ public class PropertiesPane extends VBox {
         reset();
         if (!inScene) {
             inScene = true;
+            
+            setDarkerBackground();
 
             //File Picker
             FilePicker fp = new FilePicker("Select an Image");
@@ -296,11 +324,11 @@ public class PropertiesPane extends VBox {
                 String image = fp.getFile() != null ? fp.getFile().getAbsolutePath() : null;
                 String nameOfTheApp = tf.getText().isEmpty() ? null : tf.getText();
                 String path = pp.getFile() != null ? pp.getFile().getAbsolutePath() : null;
-                String releaseYear = ((TextField) hb1.getChildren().get(0)).getText().isEmpty() ? null : ((TextField) hb1.getChildren().get(0)).getText();
-                String description = ((TextField) hb1.getChildren().get(1)).getText().isEmpty() ? null : ((TextField) hb1.getChildren().get(1)).getText();
+                String releaseYear = ((TextField) hb1.getChildren().get(0)).getText().isEmpty() ? "0" : ((TextField) hb1.getChildren().get(0)).getText();
+                String description = ((TextField) hb1.getChildren().get(1)).getText().isEmpty() ? "" : ((TextField) hb1.getChildren().get(1)).getText();
                 Category category = ((ComboBox<Category>) hb3.getChildren().get(0)).getValue() != null ? ((ComboBox<Category>) hb3.getChildren().get(0)).getValue() : null;
                 Boolean gameOrSoftware = ((RadioButton) hb2.getChildren().get(0)).isSelected();
-                String exec = ea.getText().isEmpty() ? null : ea.getText();
+                String exec = ea.getText().isEmpty() ? "" : ea.getText();
 
 
 
@@ -339,13 +367,112 @@ public class PropertiesPane extends VBox {
     }
     
     public void setAppScene(App app) {
-        //todo
+        reset();
+        
+        Rectangle imgRect = new Rectangle();
+        imgRect.setWidth(145);
+        imgRect.setHeight(202);
+        imgRect.setArcHeight(10);
+        imgRect.setArcWidth(10);
+        
+        setDarkerBackground();
+        if (app.getImgUrl() != null && !app.getImgUrl().equals("")) {
+            try {
+                Image img = new Image("file:///"+app.getImgUrl());
+                imgRect.setFill(new ImagePattern(img));
+                
+            } catch (Exception e) {
+                
+            }
+        } else {
+            System.out.println("Here");
+            imgRect.setFill(Color.TRANSPARENT);
+        }
+        
+        Label nameText = new Label(app.getName());
+        nameText.setFont(new Font("Montserrat Light", 25));
+        
+        Label desc = new Label(app.getDescription());
+        desc.setFont(new Font("Montserrat Light", 13));
+        desc.setMaxWidth(200d);
+        desc.setMaxHeight(100d);
+        desc.setAlignment(Pos.CENTER);
+        desc.setWrapText(true);
+                
+                
+                
+        HBox hb = new HBox();
+        ScrollPane sp = new ScrollPane();
+        VBox vb1 = new VBox();
+        VBox vb2 = new VBox();
+        
+        for (Category c: app.getCategories()) {
+            Label a = new Label(c.getName());
+            a.setWrapText(true);
+            a.setStyle("-fx-text-fill: -fx-text-base-color; -fx-font-family: Montserrat Light; -fx-font-size: 15; -fx-text-alignment: center;");
+            a.setMaxWidth(100d);
+            vb1.getChildren().add(a);
+        }
+        
+        vb2.getChildren().add(new Label(Integer.toString(app.getReleaseYear())));
+        ((Label) vb2.getChildren().get(0)).setFont(new Font("Montserrat", 20));
+    
+        vb1.setAlignment(Pos.CENTER);
+        vb2.setAlignment(Pos.CENTER);
+        hb.setAlignment(Pos.CENTER);
+        hb.setSpacing(10d);
+        
+        sp.setContent(vb1);
+        sp.setPrefHeight(100d);
+        sp.setPrefWidth(100d);
+        sp.setBackground(Background.EMPTY);
+        sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        sp.setStyle("-fx-border-color: transparent;"
+                  + "-fx-background-color: transparent;"
+                  + "-fx-background: transparent;");
+        hb.getChildren().addAll(sp, vb2);
+        
+        VBox vb3 = new VBox();
+        Button bt = customButton("Run");
+        bt.setPrefHeight(50d);
+        bt.setStyle(bt.getStyle() + "-fx-font-size: 20;");
+        Button btRemove = customButton("Delete App");
+        btRemove.setBackground(Background.EMPTY);
+        btRemove.setStyle(btRemove.getStyle() + "-fx-background-color: transparent;");
+        
+        vb3.setAlignment(Pos.BOTTOM_CENTER);
+        vb3.setPrefHeight(200d);
+        vb3.getChildren().addAll(bt, btRemove);
+        vb3.setSpacing(10d);
+        
+        bt.setOnAction((event) -> {
+            try {
+                Runtime rt = Runtime.getRuntime();
+                Process myProcess = rt.exec(app.getPathExec() + " " + app.getArgs());
+                System.out.println(myProcess.getOutputStream());
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+        });
+
+        
+        super.getChildren().addAll(
+                imgRect,
+                nameText,
+                desc,
+                hb,
+                vb3
+                
+        );
     }
     
     public void setAddCategorieScene() {
         reset();
         if (!inScene) {
+            
             inScene = true;
+            setDarkerBackground();
             super.setAlignment(Pos.CENTER);
 
             //Text Field

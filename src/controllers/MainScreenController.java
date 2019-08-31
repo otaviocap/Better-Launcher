@@ -1,6 +1,7 @@
 package controllers;
 
 import classes.helper.Filter;
+import classes.java.App;
 import classes.java.Category;
 import classes.javaFx.AppFx;
 import classes.javaFx.CategoriesPane;
@@ -86,6 +87,8 @@ public class MainScreenController implements Initializable {
         lnDefaults.put("minimize", minimizeButton.getFill());
         masterPane.setRight(new PropertiesPane(this));
         properties = (PropertiesPane) masterPane.getRight();
+        // ((HBox)((HBox) masterPane.getTop()).getChildren().get(0)).getChildren().add(new Button("Refresh"));
+        // Button refreshButton = ((Button)((HBox)((HBox) masterPane.getTop()).getChildren().get(0)).getChildren().get(0));
         ((VBox) masterPane.getLeft()).setBackground(Background.EMPTY);
         categories = ((VBox) ((ScrollPane) ((VBox) masterPane.getLeft()).getChildren().get(6)).getContent());
         
@@ -94,7 +97,6 @@ public class MainScreenController implements Initializable {
         
         categories.setAlignment(Pos.TOP_CENTER);
         categories.setSpacing(10d);
-        
         refreshApps();
         
         makeDraggable();
@@ -147,6 +149,10 @@ public class MainScreenController implements Initializable {
        }));
                
     }
+    
+    public void setApp(App app) {
+        properties.setAppScene(app);
+    }
 
     @FXML
     private void addButtonAction(ActionEvent event) {
@@ -174,9 +180,7 @@ public class MainScreenController implements Initializable {
         apps.getChildren().removeAll(appsFx);
         appsFx.clear();
         ad.searchAll().forEach((app) -> {
-            System.out.println("fora");
             if (Filter.checkApp(app)) {
-                System.out.println("Dentro");
                 appsFx.add(new AppFx(app, this));
             }
         });

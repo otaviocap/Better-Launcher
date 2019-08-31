@@ -2,6 +2,7 @@ package classes.helper;
 
 import classes.java.App;
 import classes.java.Category;
+import classes.javaFx.CategoryFx;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +13,12 @@ public class Filter {
     
     private static boolean isForGame = false; 
     
-    public static void toggleFilter(Category c) {
+    public static void toggleFilter(Category c, CategoryFx cf) {
         if (!filters.contains(c)) {
+            cf.setStyle(cf.getBaseCss() + "-fx-text-fill: #ffff;");
             filters.add(c);
         } else {
+            cf.setStyle(cf.getBaseCss() + "-fx-text-fill: #000000;");
             filters.remove(c);
         }
     }

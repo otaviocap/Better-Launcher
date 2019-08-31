@@ -79,8 +79,7 @@ public class FilePicker extends StackPane {
         isAnImagePicker = true;
         fileChooser.setTitle("Open an Image");
         fileChooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("Jpg", "*.jpg"),
-            new FileChooser.ExtensionFilter("Png", "*.png")
+            new FileChooser.ExtensionFilter("Images", "*.jpg", "*.png", "*.jpeg")
         );
     }
     

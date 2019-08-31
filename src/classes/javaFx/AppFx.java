@@ -46,6 +46,10 @@ public class AppFx extends StackPane {
         
        getChildren().add(background);
        getChildren().add(text);
+       
+       super.setOnMouseClicked((event) -> {
+           msc.setApp(this.app);
+       });
     }
     
     private void setDefaults() {
