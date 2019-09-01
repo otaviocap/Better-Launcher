@@ -133,7 +133,7 @@ public class PropertiesPane extends VBox {
                         hb,
                         vb2
                 );
-            } else {
+            } else {    
                 
                 // Workaround just to make the background blurry
                 setDarkerBackground(true);
