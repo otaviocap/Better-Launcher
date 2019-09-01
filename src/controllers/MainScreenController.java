@@ -173,7 +173,6 @@ public class MainScreenController implements Initializable {
         
     }
     
-    
     public void makeDraggable() {
        parent.setOnMousePressed(((event) -> {
            x = event.getSceneX();

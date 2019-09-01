@@ -19,11 +19,13 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -55,8 +57,14 @@ public class PropertiesPane extends VBox {
     
     // ================== HELPER METHODS ======================
     
-    private void setDarkerBackground() {
-        Stop[] stops = new Stop[]{new Stop(0, Color.web("#53FA82")), new Stop(1, Color.web("#4ba364"))};
+    private void setDarkerBackground(boolean trueDark) {
+        Stop[] stops;
+        
+        if (trueDark) {
+            stops = new Stop[]{new Stop(0, Color.web("#595959")), new Stop(1, Color.web("#304f26"))};
+        } else {
+            stops = new Stop[]{new Stop(0, Color.web("#53FA82")), new Stop(1, Color.web("#4ba364"))};
+        }
         setBackground(new Background(new BackgroundFill(new LinearGradient(.5, .5, 1.5, 1.5, true, CycleMethod.REFLECT, stops), CornerRadii.EMPTY, Insets.EMPTY)));
     }
     
@@ -76,7 +84,9 @@ public class PropertiesPane extends VBox {
     // =================== APP SCENES ==========================
     
     public void setAppScene(App app) {
+        
         reset();
+
         if (!app.equals(lastApp)) {
             lastApp = app;
             Rectangle imgRect = new Rectangle();
@@ -84,12 +94,14 @@ public class PropertiesPane extends VBox {
             imgRect.setHeight(202);
             imgRect.setArcHeight(10);
             imgRect.setArcWidth(10);
+            
+            boolean b = false;
 
-            setDarkerBackground();
             if (app.getImgUrl() != null && !app.getImgUrl().equals("")) {
                 try {
                     Image img = new Image("file:///"+app.getImgUrl());
                     imgRect.setFill(new ImagePattern(img));
+                    b = true;
 
                 } catch (Exception e) {
 
@@ -111,16 +123,60 @@ public class PropertiesPane extends VBox {
 
             HBox hb = categoriesAndReleaseYearDisplay(app);
                     
-            VBox vb = runAndDeleteOptions(app);
-                    
-            super.getChildren().addAll(
-                    imgRect,
-                    nameText,
-                    desc,
-                    hb,
-                    vb
+            VBox vb2 = runAndDeleteOptions(app);
+            if (!b) {
+                setDarkerBackground(false);
+                super.getChildren().addAll(
+                        imgRect,
+                        nameText,
+                        desc,
+                        hb,
+                        vb2
+                );
+            } else {
+                
+                // Workaround just to make the background blurry
+                setDarkerBackground(true);
+                StackPane sp = new StackPane();
+                sp.setPadding(new Insets(0, 0, 0, 0));
+                
+                Rectangle r = new Rectangle();
+                r.setWidth(super.getPrefWidth()+10);
+                r.setHeight(super.getPrefHeight()+10);
+                r.setFill(imgRect.getFill());
 
-            );
+                Rectangle rb = new Rectangle();
+                rb.setFill(Color.rgb(153, 153, 153, .3));
+                rb.setWidth(super.getPrefWidth()+10);
+                rb.setHeight(super.getPrefHeight()+10);
+                
+                VBox vb = new VBox();
+                vb.setPadding(new Insets(10, 10, 10, 10));
+                vb.setSpacing(15);
+                
+
+                
+                GaussianBlur blur = new GaussianBlur(15d);
+                r.setEffect(blur);
+                rb.setEffect(blur);
+                
+                sp.setAlignment(Pos.CENTER);
+                vb.setAlignment(Pos.CENTER);
+                
+                vb.getChildren().addAll(
+                        imgRect,
+                        nameText,
+                        desc,
+                        hb,
+                        vb2
+                );
+                sp.getChildren().addAll(
+                    r,
+                    rb,
+                    vb
+                );
+                super.getChildren().add(sp);
+            }
         } else {
             lastApp = null;
         }
@@ -136,7 +192,7 @@ public class PropertiesPane extends VBox {
             inScene[1] = false;
             inScene[2] = false;
             
-            setDarkerBackground();
+            setDarkerBackground(false);
 
             //File Picker
             FilePicker fp = new FilePicker("Select an Image");
@@ -235,7 +291,7 @@ public class PropertiesPane extends VBox {
             inScene[1] = true;
             inScene[2] = false;
             
-            setDarkerBackground();
+            setDarkerBackground(false);
 
             //File Picker
             FilePicker fp = new FilePicker("Select an Image");
@@ -362,7 +418,7 @@ public class PropertiesPane extends VBox {
             inScene[0] = false;
             inScene[1] = false;
             inScene[2] = true;
-            setDarkerBackground();
+            setDarkerBackground(false);
             super.setAlignment(Pos.CENTER);
 
             //Text Field
@@ -411,7 +467,7 @@ public class PropertiesPane extends VBox {
             inScene[0] = false;
             inScene[1] = false;
             inScene[2] = false;
-            setDarkerBackground();
+            setDarkerBackground(false);
             super.setAlignment(Pos.CENTER);
 
             //Text Field

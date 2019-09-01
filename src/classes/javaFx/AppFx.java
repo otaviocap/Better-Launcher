@@ -115,20 +115,7 @@ public class AppFx extends StackPane {
                 cm.show(me, event.getScreenX(), event.getScreenY());
             }
         });
-    }
-    
-    public void run() {
-        ProcessBuilder pb = new ProcessBuilder();
-        List<String> command = new ArrayList<>();
-        String i = app.getPathExec() +" "+ app.getArgs();
-        command.addAll(Arrays.asList(i.split(" ")));
-        pb.command(command);
-        try {
-            pb.start();
-        } catch (IOException ex) {
-            System.out.println("An error occured while trying to execute the app " + ex.getMessage());
-        }
-    }
+    }   
 
     
     public Label getText() {
